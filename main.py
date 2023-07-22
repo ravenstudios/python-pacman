@@ -1,9 +1,14 @@
 from constants import *
 import pygame
 import player
+import make_map
+
 
 player_group = pygame.sprite.GroupSingle()
-player_group.add(player.Player(50, 50, YELLOW))
+map = make_map.Make_Map()
+
+
+player_group.add(player.Player(BLOCK_SIZE * 2, BLOCK_SIZE * 2, YELLOW))
 clock = pygame.time.Clock()
 surface = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT))
 
@@ -35,12 +40,13 @@ def main():
 def draw():
     surface.fill((0, 0, 0))#background
     player_group.draw(surface)
+    map.get_tiles().draw(surface)
     pygame.display.flip()
 
 
 
 def update():
-    player_group.update()
+    player_group.update(map.get_tiles())
 
 
 
