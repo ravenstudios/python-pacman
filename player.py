@@ -9,21 +9,34 @@ import portal
 class Player(sprite.Sprite):
     def __init__(self, x, y, color):
         super().__init__(x, y, color)
-        self.speed = 3
+        self.speed = 5
+
         # self.move_vec[0] = self.speed
         # self.move_vec[1] = 0
         self.move_vec = (1, 0)
+        self.start_offset = 0
+        self.cols = 33
+
+
 
     def update(self, map):
         self.collision(map)
-        self.check_keys()
+        self.check_keys(map)
         self.move(map)
 
     def move(self, map):
+
+        if self.rect.right > self.cols * BLOCK_SIZE and self.move_vec[0] > 0:
+            self.rect.left = 0
+
+        elif self.rect.left < self.start_offset and self.move_vec[0] < 0:
+            self.rect.left = self.cols * BLOCK_SIZE
+
+
+
         temp_sprite = pygame.sprite.Sprite()
         temp_vec = self.move_vec * self.speed
         temp_sprite.rect = self.rect.move(temp_vec[0], temp_vec[1])
-        # temp_sprite.rect.topl
 
         collided_objects = pygame.sprite.spritecollide(temp_sprite, map, False)
 
@@ -37,21 +50,13 @@ class Player(sprite.Sprite):
 
 
         else:
-            self.rect.left += self.move_vec[0]
-            self.rect.top += self.move_vec[1]
+            self.rect.left += self.move_vec[0] * self.speed
+            self.rect.top += self.move_vec[1] * self.speed
 
 
     def collision(self, map):
         collided_objects = pygame.sprite.spritecollide(self, map, False)
-
-        if collided_objects:
-            return collided_objects
-        return False
-
-                #
-                #
-                # if type(co) == portal.Portal:
-                #     self.rect.left = BLOCK_SIZE if self.move_vec[0] > 0 else GAME_WIDTH - (BLOCK_SIZE * 2)
+        return collided_objects if collided_objects else False
 
 
 
@@ -60,18 +65,30 @@ class Player(sprite.Sprite):
 
 
 
-
-    def check_keys(self):
+    def check_keys(self, map):
         keys = pygame.key.get_pressed()
+        temp_sprite = pygame.sprite.Sprite()
 
         if (keys[pygame.K_w] or keys[pygame.K_UP]):
-            self.move_vec = (0, -1)
+            temp_vec = (0, -1) * self.speed
+            temp_sprite.rect = self.rect.move(temp_vec[0], temp_vec[1])
+            if not pygame.sprite.spritecollide(temp_sprite, map, False):
+                self.move_vec = (0, -1)
 
         if (keys[pygame.K_d] or keys[pygame.K_RIGHT]):
-            self.move_vec = (1, 0)
+            temp_vec = (1, 0) * self.speed
+            temp_sprite.rect = self.rect.move(temp_vec[0], temp_vec[1])
+            if not pygame.sprite.spritecollide(temp_sprite, map, False):
+                self.move_vec = (1, 0)
 
         if (keys[pygame.K_s] or keys[pygame.K_DOWN]):
-            self.move_vec = (0, 1)
+            temp_vec = (0, 1) * self.speed
+            temp_sprite.rect = self.rect.move(temp_vec[0], temp_vec[1])
+            if not pygame.sprite.spritecollide(temp_sprite, map, False):
+                self.move_vec = (0, 1)
 
         if (keys[pygame.K_a] or keys[pygame.K_LEFT]):
-            self.move_vec = (-1, 0)
+            temp_vec = (-1, 0) * self.speed
+            temp_sprite.rect = self.rect.move(temp_vec[0], temp_vec[1])
+            if not pygame.sprite.spritecollide(temp_sprite, map, False):
+                self.move_vec = (-1, 0)

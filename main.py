@@ -8,7 +8,7 @@ player_group = pygame.sprite.GroupSingle()
 map = make_map.Make_Map()
 
 
-player_group.add(player.Player(BLOCK_SIZE * 2, BLOCK_SIZE * 2, YELLOW))
+player_group.add(player.Player(BLOCK_SIZE , BLOCK_SIZE * 2, YELLOW))
 clock = pygame.time.Clock()
 surface = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT))
 
