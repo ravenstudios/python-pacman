@@ -15,12 +15,11 @@ class Player(sprite.Sprite):
         # self.move_vec[1] = 0
         self.move_vec = (1, 0)
         self.start_offset = 0
-        self.cols = 33
+        self.cols = 19
         self.score = 0
 
 
     def update(self, map, pills):
-        print(self.score)
         self.collision(map)
         self.check_keys(map)
         self.move(map, pills)

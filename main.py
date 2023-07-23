@@ -3,12 +3,12 @@ import pygame
 import player
 import make_map
 
-
+player = player.Player(BLOCK_SIZE , BLOCK_SIZE * 2, YELLOW)
 player_group = pygame.sprite.GroupSingle()
-map = make_map.Make_Map()
+map = make_map.Make_Map(player)
 
 
-player_group.add(player.Player(BLOCK_SIZE , BLOCK_SIZE * 2, YELLOW))
+player_group.add(player)
 clock = pygame.time.Clock()
 surface = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT))
 
@@ -48,7 +48,7 @@ def draw():
 
 def update():
     player_group.update(map.get_tiles(), map.get_pills())
-    
+
 
 
 if __name__ == "__main__":
