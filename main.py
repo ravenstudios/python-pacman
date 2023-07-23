@@ -41,13 +41,14 @@ def draw():
     surface.fill((0, 0, 0))#background
     player_group.draw(surface)
     map.get_tiles().draw(surface)
+    map.get_pills().draw(surface)
     pygame.display.flip()
 
 
 
 def update():
-    player_group.update(map.get_tiles())
-
+    player_group.update(map.get_tiles(), map.get_pills())
+    
 
 
 if __name__ == "__main__":

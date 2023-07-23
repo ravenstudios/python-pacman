@@ -2,7 +2,7 @@ from constants import *
 import pygame
 import sprite
 import wall
-import portal
+import pill
 
 
 
@@ -16,15 +16,16 @@ class Player(sprite.Sprite):
         self.move_vec = (1, 0)
         self.start_offset = 0
         self.cols = 33
+        self.score = 0
 
 
-
-    def update(self, map):
+    def update(self, map, pills):
+        print(self.score)
         self.collision(map)
         self.check_keys(map)
-        self.move(map)
+        self.move(map, pills)
 
-    def move(self, map):
+    def move(self, map, pills):
 
         if self.rect.right > self.cols * BLOCK_SIZE and self.move_vec[0] > 0:
             self.rect.left = 0
@@ -39,6 +40,14 @@ class Player(sprite.Sprite):
         temp_sprite.rect = self.rect.move(temp_vec[0], temp_vec[1])
 
         collided_objects = pygame.sprite.spritecollide(temp_sprite, map, False)
+        collided_pills = pygame.sprite.spritecollide(self, pills, True)
+
+        for p in collided_pills:
+            if type(p) == pill.Small_Pill:
+                self.score += 1
+            else:
+                self.score += 50
+                self.power_mode = True
 
         if collided_objects:
             for co in collided_objects:
