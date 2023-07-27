@@ -7,7 +7,7 @@ import pill
 
 
 class Player(sprite.Sprite):
-    def __init__(self, x, y, color):
+    def __init__(self, x, y, color, map):
         super().__init__(x, y, color)
         self.speed = 5
 
@@ -15,8 +15,10 @@ class Player(sprite.Sprite):
         # self.move_vec[1] = 0
         self.move_vec = (1, 0)
         self.start_offset = 0
-        self.cols = 19
+        self.cols = map.get_cols()
+        self.rows = map.get_rows()
         self.score = 0
+
 
 
     def update(self, map, pills):
@@ -69,7 +71,11 @@ class Player(sprite.Sprite):
 
 
 
+    def get_grid_location(self):
 
+        x =  self.rect.x  // BLOCK_SIZE
+        y = self.rect.y  // BLOCK_SIZE
+        return (x, y)
 
 
 
