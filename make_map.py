@@ -12,13 +12,14 @@ class Make_Map():
         self.rows = 0
         self.cols = 0
         self.map_list = []
-        self.load_map(self.map_file)
 
 
-    def load_map(self, map_file):
+
+
+    def load_map(self, player, ghost):
         r, c = 0, 0
 
-        with open(map_file, "r") as file:
+        with open(self.map_file, "r") as file:
             lines = file.readlines()
 
             for line in lines:
@@ -34,6 +35,12 @@ class Make_Map():
                         self.pills.add(pill.Small_Pill(c * BLOCK_SIZE, r * BLOCK_SIZE, WHITE))
                     if letter == "o":
                         self.pills.add(pill.Big_Pill(c * BLOCK_SIZE, r * BLOCK_SIZE, WHITE))
+                    if letter == "P":
+                        player.rect.x = c * BLOCK_SIZE
+                        player.rect.y = r * BLOCK_SIZE
+                    if letter == "0":
+                        ghost.rect.x = c * BLOCK_SIZE
+                        ghost.rect.y = r * BLOCK_SIZE
 
                     c += 1
                     self.cols += 1

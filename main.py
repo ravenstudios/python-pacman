@@ -5,8 +5,14 @@ import make_map
 import ghost
 
 
+
 map = make_map.Make_Map()
 player = player.Player(BLOCK_SIZE * 5 , BLOCK_SIZE * 15, YELLOW, map)
+
+blinky = ghost.Ghost(9 * BLOCK_SIZE, 7 * BLOCK_SIZE, RED, map, player)
+map.load_map(player, blinky)
+
+
 player_group = pygame.sprite.GroupSingle()
 player_group.add(player)
 
@@ -14,7 +20,7 @@ player_group.add(player)
 
 
 ghost_group = pygame.sprite.Group()
-blinky = ghost.Ghost(9 * BLOCK_SIZE, 7 * BLOCK_SIZE, RED, map, player)
+
 ghost_group.add(blinky)
 
 
@@ -62,7 +68,7 @@ def draw():
 
 
 def update():
-    player_group.update(map.get_tiles(), map.get_pills())
+    player_group.update()
     ghost_group.update(player)
 
 def draw_grid(surface):

@@ -15,32 +15,33 @@ class Player(sprite.Sprite):
         # self.move_vec[1] = 0
         self.move_vec = (1, 0)
         self.start_offset = 0
-        self.cols = map.get_cols()
-        self.rows = map.get_rows()
+        self.map = map
         self.score = 0
 
 
 
-    def update(self, map, pills):
-        self.collision(map)
-        self.check_keys(map)
-        self.move(map, pills)
+    def update(self):
 
-    def move(self, map, pills):
+        self.collision()
+        self.check_keys()
+        self.move()
 
-        if self.rect.right > self.cols * BLOCK_SIZE and self.move_vec[0] > 0:
+    def move(self):
+
+        if self.rect.right > self.map.get_cols() * BLOCK_SIZE and self.move_vec[0] > 0:
             self.rect.left = 0
 
         elif self.rect.left < self.start_offset and self.move_vec[0] < 0:
-            self.rect.left = self.cols * BLOCK_SIZE
+            self.rect.left = self.map.get_cols() * BLOCK_SIZE
 
 
 
         temp_sprite = pygame.sprite.Sprite()
         temp_vec = self.move_vec * self.speed
         temp_sprite.rect = self.rect.move(temp_vec[0], temp_vec[1])
-
-        collided_objects = pygame.sprite.spritecollide(temp_sprite, map, False)
+        pills = self.map.get_pills()
+        map_tiles = self.map.get_tiles()
+        collided_objects = pygame.sprite.spritecollide(temp_sprite, map_tiles, False)
         collided_pills = pygame.sprite.spritecollide(self, pills, True)
 
         for p in collided_pills:
@@ -64,8 +65,8 @@ class Player(sprite.Sprite):
             self.rect.top += self.move_vec[1] * self.speed
 
 
-    def collision(self, map):
-        collided_objects = pygame.sprite.spritecollide(self, map, False)
+    def collision(self):
+        collided_objects = pygame.sprite.spritecollide(self, self.map.get_tiles(), False)
         return collided_objects if collided_objects else False
 
 
@@ -79,30 +80,30 @@ class Player(sprite.Sprite):
 
 
 
-    def check_keys(self, map):
+    def check_keys(self):
         keys = pygame.key.get_pressed()
         temp_sprite = pygame.sprite.Sprite()
 
         if (keys[pygame.K_w] or keys[pygame.K_UP]):
             temp_vec = (0, -1) * self.speed
             temp_sprite.rect = self.rect.move(temp_vec[0], temp_vec[1])
-            if not pygame.sprite.spritecollide(temp_sprite, map, False):
+            if not pygame.sprite.spritecollide(temp_sprite, self.map.get_tiles(), False):
                 self.move_vec = (0, -1)
 
         if (keys[pygame.K_d] or keys[pygame.K_RIGHT]):
             temp_vec = (1, 0) * self.speed
             temp_sprite.rect = self.rect.move(temp_vec[0], temp_vec[1])
-            if not pygame.sprite.spritecollide(temp_sprite, map, False):
+            if not pygame.sprite.spritecollide(temp_sprite, self.map.get_tiles(), False):
                 self.move_vec = (1, 0)
 
         if (keys[pygame.K_s] or keys[pygame.K_DOWN]):
             temp_vec = (0, 1) * self.speed
             temp_sprite.rect = self.rect.move(temp_vec[0], temp_vec[1])
-            if not pygame.sprite.spritecollide(temp_sprite, map, False):
+            if not pygame.sprite.spritecollide(temp_sprite, self.map.get_tiles(), False):
                 self.move_vec = (0, 1)
 
         if (keys[pygame.K_a] or keys[pygame.K_LEFT]):
             temp_vec = (-1, 0) * self.speed
             temp_sprite.rect = self.rect.move(temp_vec[0], temp_vec[1])
-            if not pygame.sprite.spritecollide(temp_sprite, map, False):
+            if not pygame.sprite.spritecollide(temp_sprite, self.map.get_tiles(), False):
                 self.move_vec = (-1, 0)
